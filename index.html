@@ -93,6 +93,7 @@
             border: 1px solid var(--border-uniform);
             box-shadow: 0 0 20px rgba(0,0,0,0.05); /* Sombra apenas para tela */
             display: none;
+            position: relative;
         }
 
         .mapa-pagina.visivel { display: block; }
@@ -145,6 +146,18 @@
             border: 1px solid var(--border-uniform) !important;
         }
 
+        /* ESTILO DO RODAPÉ (TELA) */
+        .report-footer {
+            margin-top: 30px;
+            padding-top: 10px;
+            border-top: 1px dashed var(--border-uniform);
+            text-align: center;
+            font-size: 12px;
+            font-weight: 700;
+            color: #64748b;
+            text-transform: uppercase;
+        }
+
         /* REMOÇÃO DE SOMBRAS E AJUSTES DE IMPRESSÃO */
         @media print {
             body { background: white !important; padding: 0 !important; margin: 0 !important; }
@@ -153,12 +166,24 @@
             .mapa-pagina.visivel { 
                 display: block !important;
                 margin: 0 !important; 
-                padding: 10mm !important;
+                padding: 10mm 10mm 20mm 10mm !important; /* Aumentado espaçamento inferior para o rodapé */
                 width: 100% !important; 
                 border: none !important; /* Remove borda externa na impressão */
                 box-shadow: none !important; /* REMOVE A SOMBRA COMPLETAMENTE */
                 page-break-after: always !important;
                 transform: none !important;
+                position: relative !important;
+                height: 297mm !important; /* Força a altura da folha A4 */
+            }
+
+            /* Fixa o rodapé estritamente na parte inferior da folha impressa */
+            .report-footer {
+                position: absolute !important;
+                bottom: 15mm !important;
+                left: 10mm !important;
+                right: 10mm !important;
+                margin: 0 !important;
+                border-top: 1px solid var(--border-uniform) !important;
             }
 
             /* Garante que as bordas da tabela continuem visíveis em cinza */
@@ -198,18 +223,18 @@ document.getElementById('inputCsv').addEventListener('change', function(e) {
 });
 
 const ITENS_MONITORADOS = [
-    { cod: "863059", nome: "GARRAFEIRA 23" },
-    { cod: "198214", nome: "GFA VIDRO 330 M" },
-    { cod: "188005", nome: "GFE 1L 12" },
-    { cod: "188006", nome: "GFA VD 1L" },
-    { cod: "899599", nome: "GFE PRETA" },
-    { cod: "27983",  nome: "GFA A CERV 1/1" },
-    { cod: "786238", nome: "GFA VIDRO 635ML" },
-    { cod: "893605", nome: "GARRAFA CORONA" },
-    { cod: "101489", nome: "BARRIL 30 L" },
-    { cod: "101490", nome: "BARRIL 50 L" },
-    { cod: "42069",  nome: "PALETE PBR II" },
-    { cod: "37108",  nome: "CHAPATEX" }
+    { cod: "863059", nome: "GARRAFEIRA 23", nomeExibicao: "GARRAFEIRA 330" },
+    { cod: "198214", nome: "GFA VIDRO 330 M", nomeExibicao: "GFA VIDRO 330 M" },
+    { cod: "188005", nome: "GFE 1L 12", nomeExibicao: "GARRAFEIRA LITRO" },
+    { cod: "188006", nome: "GFA VD 1L", nomeExibicao: "GFA VIDRO 1L" },
+    { cod: "899599", nome: "GFE PRETA", nomeExibicao: "GARRAFEIRA 600" },
+    { cod: "27983",  nome: "GFA A CERV 1/1", nomeExibicao: "GFA 600 AMBAR" },
+    { cod: "786238", nome: "GFA VIDRO 635ML", nomeExibicao: "GFA 600 VERDE" },
+    { cod: "893605", nome: "GARRAFA CORONA", nomeExibicao: "GFA 600 CORONA" },
+    { cod: "101489", nome: "BARRIL 30 L", nomeExibicao: "BARRIL 30 L" },
+    { cod: "101490", nome: "BARRIL 50 L", nomeExibicao: "BARRIL 50 L" },
+    { cod: "42069",  nome: "PALETE PBR II", nomeExibicao: "PALETE PBR II" },
+    { cod: "37108",  nome: "CHAPATEX", nomeExibicao: "CHAPATEX" }
 ];
 
 function processarArquivo(texto) {
@@ -284,7 +309,7 @@ function renderizarMapa(id, dados, totais) {
     let tabelaLinhas = "";
     ITENS_MONITORADOS.forEach(item => {
         if (totais[item.cod] !== undefined) {
-            tabelaLinhas += `<tr><td class="cod-col">${item.cod}</td><td style="font-weight:600">${item.nome}</td><td class="qtd-col">${totais[item.cod]}</td></tr>`;
+            tabelaLinhas += `<tr><td class="cod-col">${item.cod}</td><td style="font-weight:600">${item.nomeExibicao}</td><td class="qtd-col">${totais[item.cod]}</td></tr>`;
         }
     });
 
@@ -299,6 +324,7 @@ function renderizarMapa(id, dados, totais) {
             <thead><tr><th style="text-align:center">Código</th><th>Descrição do Produto</th><th style="text-align:center">Quantidade</th></tr></thead>
             <tbody>${tabelaLinhas}</tbody>
         </table>
+        <div class="report-footer">Obs: Confira a carga na saída, retorne com a carga organizada, mantenha-se seguro, boa jornada!</div>
     `;
     document.getElementById('conteudo').appendChild(div);
 }
