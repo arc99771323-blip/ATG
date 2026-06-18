@@ -5,93 +5,227 @@
     <title>Sistema de Gestão de Vasilhame</title>
     <style>
         :root {
-            --primary: #475569;
-            --accent: #3b82f6;
-            --success: #10b981;
-            --bg: #f8fafc;
-            --border-uniform: #94a3b8;
-            --text: #334155;
+            --primary-blue: #1e3a8a; /* Azul escuro do cabeçalho */
+            --accent-blue: #3b82f6;
+            --success-green: #10b981;
+            --bg-gray: #f8fafc;
+            --border-color: #cbd5e1;
+            --text-dark: #1e293b;
         }
 
-        * { box-sizing: border-box; transition: all 0.2s ease; }
+        * { 
+            box-sizing: border-box; 
+            transition: all 0.2s ease; 
+        }
         
         body { 
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; 
-            background-color: var(--bg); 
-            color: var(--text);
-            margin: 0; padding: 20px;
+            background-color: var(--bg-gray); 
+            color: var(--text-dark);
+            margin: 0; 
+            padding: 0;
         }
 
-        /* PAINEL DE CONTROLE */
-        .no-print { 
-            max-width: 1000px;
-            margin: 0 auto 40px auto;
-            background: white; 
-            padding: 30px; 
-            border-radius: 16px; 
-            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1); 
-            border: 1px solid var(--border-uniform);
-            text-align: center;
+        /* BARRA SUPERIOR (HEADER) */
+        .top-navbar {
+            background: linear-gradient(90deg, #1e40af, #1e3a8a);
+            color: white;
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
 
-        .no-print h1 { font-size: 24px; margin-top: 0; color: var(--primary); }
+        .brand-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
 
-        input[type="file"] {
-            padding: 10px;
-            background: #f1f5f9;
+        .brand-icon {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 8px;
             border-radius: 8px;
-            border: 2px dashed var(--border-uniform);
-            width: 100%;
-            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .brand-icon svg {
+            width: 24px;
+            height: 24px;
+            fill: white;
+        }
+
+        .brand-text h1 {
+            font-size: 20px;
+            margin: 0;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .brand-text span {
+            font-size: 12px;
+            opacity: 0.8;
+            display: block;
+            margin-top: 2px;
+        }
+
+        .status-badge {
+            background-color: rgba(16, 185, 129, 0.2);
+            border: 1px solid var(--success-green);
+            color: #34d399;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--success-green);
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        /* ÁREA DE CONTROLE PRINCIPAL */
+        .main-container {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .upload-card {
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        /* DROPZONE CUSTOMIZADO */
+        .dropzone-area {
+            border: 2px dashed #cbd5e1;
+            border-radius: 8px;
+            padding: 40px 20px;
+            text-align: center;
+            position: relative;
+            background: #ffffff;
             cursor: pointer;
+        }
+
+        .dropzone-area:hover {
+            border-color: var(--accent-blue);
+            background: #f0f7ff;
+        }
+
+        .dropzone-area input[type="file"] {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .upload-icon {
+            background: #eff6ff;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px auto;
+        }
+
+        .upload-icon svg {
+            width: 28px;
+            height: 28px;
+            stroke: var(--accent-blue);
+        }
+
+        .upload-text {
+            font-size: 16px;
+            font-weight: 600;
+            color: #334155;
+            margin: 0 0 8px 0;
+        }
+
+        .upload-subtext {
+            font-size: 13px;
+            color: #64748b;
+            margin: 0;
+        }
+
+        /* SEÇÃO DE FILTROS */
+        #area-filtros {
+            margin-top: 30px;
+            border-top: 1px solid #e2e8f0;
+            padding-top: 20px;
         }
 
         #lista-filtros {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
             gap: 10px;
-            margin: 20px 0;
+            margin: 15px 0;
             padding: 15px;
             background: #f8fafc;
-            border-radius: 12px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
         }
 
         .btn-mapa {
             padding: 10px;
             background: white;
-            border: 1px solid var(--border-uniform);
-            color: var(--text);
-            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            color: var(--text-dark);
+            border-radius: 6px;
             cursor: pointer;
             font-weight: 600;
+            font-size: 13px;
         }
 
-        .btn-mapa.ativo { background: var(--accent); color: white; border-color: var(--accent); }
+        .btn-mapa.ativo { 
+            background: var(--accent-blue); 
+            color: white; 
+            border-color: var(--accent-blue); 
+        }
 
-        .acoes-globais { display: flex; justify-content: center; gap: 10px; margin-top: 20px; border-top: 1px solid var(--border-uniform); padding-top: 20px; }
+        .acoes-globais { 
+            display: flex; 
+            justify-content: flex-start; 
+            gap: 10px; 
+            margin-top: 20px; 
+            flex-wrap: wrap;
+        }
 
         .btn {
-            padding: 12px 24px;
+            padding: 10px 20px;
             font-size: 13px;
-            font-weight: 700;
+            font-weight: 600;
             cursor: pointer;
             border: none;
-            border-radius: 8px;
-            text-transform: uppercase;
+            border-radius: 6px;
         }
 
-        .btn-print { background: var(--primary); color: white; }
-        .btn-all { background: var(--success); color: white; }
-        .btn-clear { background: #f1f5f9; color: var(--text); border: 1px solid var(--border-uniform); }
+        .btn-all { background: var(--success-green); color: white; }
+        .btn-clear { background: #e2e8f0; color: #475569; }
+        .btn-csv { background: #f59e0b; color: white; } /* Cor Laranja para o CSV */
+        .btn-print { background: var(--primary-blue); color: white; margin-left: auto; }
 
         /* ESTILO DO RELATÓRIO */
         .mapa-pagina { 
             background: white; 
             width: 210mm; 
-            margin: 0 auto 50px auto; 
+            margin: 40px auto; 
             padding: 15mm; 
-            border: 1px solid var(--border-uniform);
-            box-shadow: 0 0 20px rgba(0,0,0,0.05); /* Sombra apenas para tela */
+            border: 1px solid #cbd5e1;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
             display: none;
             position: relative;
         }
@@ -101,39 +235,41 @@
         .report-header {
             display: flex;
             justify-content: space-between;
-            border-bottom: 1px solid var(--border-uniform);
+            border-bottom: 2px solid #e2e8f0;
             padding-bottom: 15px;
             margin-bottom: 25px;
         }
 
-        .report-header div span { display: block; font-size: 11px; color: #64748b; text-transform: uppercase; }
-        .report-header div strong { font-size: 16px; color: var(--primary); }
+        .report-header div span { display: block; font-size: 11px; color: #64748b; text-transform: uppercase; font-weight: 600; }
+        .report-header div strong { font-size: 16px; color: var(--primary-blue); }
 
         .report-title {
             text-align: center;
             font-weight: 700;
             font-size: 20px;
             margin-bottom: 30px;
-            color: var(--primary);
+            color: var(--primary-blue);
             text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         table { width: 100%; border-collapse: collapse; table-layout: fixed; }
         
         th { 
-            border: 1px solid var(--border-uniform);
+            border: 1px solid #cbd5e1;
             background: #f1f5f9;
             padding: 12px;
             font-size: 11px;
-            color: var(--primary);
+            color: #475569;
             text-align: left;
+            text-transform: uppercase;
         }
 
         td { 
-            border: 1px solid var(--border-uniform); 
+            border: 1px solid #cbd5e1; 
             padding: 14px 12px; 
             font-size: 14px; 
-            color: var(--text);
+            color: var(--text-dark);
         }
 
         .cod-col { width: 90px; text-align: center; }
@@ -142,23 +278,22 @@
             text-align: center; 
             background-color: #fef9c3 !important;
             font-weight: 800; 
-            font-size: 26px; 
-            border: 1px solid var(--border-uniform) !important;
+            font-size: 24px; 
+            border: 1px solid #cbd5e1 !important;
         }
 
-        /* ESTILO DO RODAPÉ (TELA) */
         .report-footer {
             margin-top: 30px;
             padding-top: 10px;
-            border-top: 1px dashed var(--border-uniform);
+            border-top: 1px dashed #cbd5e1;
             text-align: center;
-            font-size: 12px;
-            font-weight: 700;
+            font-size: 11px;
+            font-weight: 600;
             color: #64748b;
             text-transform: uppercase;
         }
 
-        /* REMOÇÃO DE SOMBRAS E AJUSTES DE IMPRESSÃO */
+        /* AJUSTES DE IMPRESSÃO */
         @media print {
             body { background: white !important; padding: 0 !important; margin: 0 !important; }
             .no-print { display: none !important; }
@@ -166,47 +301,71 @@
             .mapa-pagina.visivel { 
                 display: block !important;
                 margin: 0 !important; 
-                padding: 10mm 10mm 20mm 10mm !important; /* Aumentado espaçamento inferior para o rodapé */
+                padding: 10mm !important;
                 width: 100% !important; 
-                border: none !important; /* Remove borda externa na impressão */
-                box-shadow: none !important; /* REMOVE A SOMBRA COMPLETAMENTE */
+                border: none !important; 
+                box-shadow: none !important; 
                 page-break-after: always !important;
-                transform: none !important;
                 position: relative !important;
-                height: 297mm !important; /* Força a altura da folha A4 */
+                height: 297mm !important; 
             }
 
-            /* Fixa o rodapé estritamente na parte inferior da folha impressa */
             .report-footer {
                 position: absolute !important;
                 bottom: 15mm !important;
                 left: 10mm !important;
                 right: 10mm !important;
                 margin: 0 !important;
-                border-top: 1px solid var(--border-uniform) !important;
+                border-top: 1px solid #cbd5e1 !important;
             }
 
-            /* Garante que as bordas da tabela continuem visíveis em cinza */
-            table, th, td { border: 1px solid var(--border-uniform) !important; }
-            
+            table, th, td { border: 1px solid #94a3b8 !important; }
             @page { size: A4; margin: 0; }
-            * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; box-shadow: none !important; }
+            * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
         }
     </style>
 </head>
 <body>
 
-<div class="no-print">
-    <h1>📦 Gestor de Retorno de Vasilhame</h1>
-    <input type="file" id="inputCsv" accept=".csv,.txt">
+<div class="top-navbar no-print">
+    <div class="brand-container">
+        <div class="brand-icon">
+            <svg viewBox="0 0 24 24">
+                <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
+            </svg>
+        </div>
+        <div class="brand-text">
+            <h1>Leitor de Prestação de Contas</h1>
+            <span>Conversor Inteligente Promax Web • Ambev S.A.</span>
+        </div>
+    </div>
+    <div class="status-badge">
+        <span class="status-dot"></span> Pronto para Processar - André Moura
+    </div>
+</div>
 
-    <div id="area-filtros" style="display:none;">
-        <p style="font-weight: 600; color: #64748b;">Mapas identificados:</p>
-        <div id="lista-filtros"></div>
-        <div class="acoes-globais">
-            <button class="btn btn-all" onclick="selecionarTodos(true)">Selecionar Todos</button>
-            <button class="btn btn-clear" onclick="selecionarTodos(false)">Limpar Tudo</button>
-            <button class="btn btn-print" onclick="window.print()">Gerar PDF / Imprimir</button>
+<div class="main-container no-print">
+    <div class="upload-card">
+        <div class="dropzone-area">
+            <div class="upload-icon">
+                <svg fill="none" viewBox="0 0 24 24" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 16v-8m0 8l-4-4m4 4l4-4M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v8" />
+                </svg>
+            </div>
+            <p class="upload-text">Arraste o arquivo CSV/TXT do Promax ou clique aqui</p>
+            <p class="upload-subtext">Rotina 03.03.22 salve em CSV</p>
+            <input type="file" id="inputCsv" accept=".csv,.txt">
+        </div>
+
+        <div id="area-filtros" style="display:none;">
+            <p style="font-weight: 600; color: #475569; font-size: 14px; margin-bottom: 5px;">Mapas identificados:</p>
+            <div id="lista-filtros"></div>
+            <div class="acoes-globais">
+                <button class="btn btn-all" onclick="selecionarTodos(true)">Selecionar Todos</button>
+                <button class="btn btn-clear" onclick="selecionarTodos(false)">Limpar Tudo</button>
+                <button class="btn btn-csv" onclick="exportarParaCSV()">Exportar para CSV</button>
+                <button class="btn btn-print" onclick="window.print()">Gerar PDF / Imprimir</button>
+            </div>
         </div>
     </div>
 </div>
@@ -214,6 +373,9 @@
 <div id="conteudo"></div>
 
 <script>
+// Armazenamento global dos dados processados para facilitar a exportação
+let dadosMapasProcessados = {};
+
 document.getElementById('inputCsv').addEventListener('change', function(e) {
     const file = e.target.files[0];
     if (!file) return;
@@ -244,6 +406,7 @@ function processarArquivo(texto) {
     
     output.innerHTML = '';
     listaFiltros.innerHTML = '';
+    dadosMapasProcessados = {}; // Limpa dados anteriores
 
     const blocosMapas = texto.split(/(?=Mapa:\s*\d+)/g);
 
@@ -275,7 +438,11 @@ function processarArquivo(texto) {
         });
 
         if (Object.keys(totais).length > 0) {
-            renderizarMapa(mapaID, { id: mapaID, placa: p?.[1] || "---", data: d?.[1] || "---" }, totais);
+            const infoMapa = { id: mapaID, placa: p?.[1] || "---", data: d?.[1] || "---" };
+            // Salva no objeto global para exportação posterior
+            dadosMapasProcessados[mapaID] = { info: infoMapa, totais: totais };
+            
+            renderizarMapa(mapaID, infoMapa, totais);
             criarBotaoFiltro(mapaID);
         }
     });
@@ -327,6 +494,55 @@ function renderizarMapa(id, dados, totais) {
         <div class="report-footer">Obs: Confira a carga na saída, retorne com a carga organizada, mantenha-se seguro, boa jornada!</div>
     `;
     document.getElementById('conteudo').appendChild(div);
+}
+
+// NOVA FUNÇÃO: Exportação Inteligente para CSV
+function exportarParaCSV() {
+    // Localiza quais páginas de mapas estão atualmente com a classe 'visivel'
+    const mapasVisiveis = Array.from(document.querySelectorAll('.mapa-pagina.visivel')).map(el => el.id.replace('mapa-', ''));
+
+    if (mapasVisiveis.length === 0) {
+        alert('Por favor, selecione pelo menos um mapa para exportar!');
+        return;
+    }
+
+    // Cabeçalho do CSV (Utiliza ponto e vírgula por padrão de compatibilidade com Excel em PT-BR)
+    let csvConteudo = "Mapa;Placa;Data;Codigo;Descricao;Quantidade\n";
+
+    mapasVisiveis.forEach(id => {
+        const mapaData = dadosMapasProcessados[id];
+        if (!mapaData) return;
+
+        const info = mapaData.info;
+        const totais = mapaData.totais;
+
+        ITENS_MONITORADOS.forEach(item => {
+            if (totais[item.cod] !== undefined) {
+                // Monta a linha limpando possíveis quebras de linha ou ponto e vírgula indesejados
+                const linha = [
+                    info.id,
+                    info.placa,
+                    info.data,
+                    item.cod,
+                    item.nomeExibicao,
+                    totais[item.cod]
+                ].join(";");
+                csvConteudo += linha + "\n";
+            }
+        });
+    });
+
+    // Força a codificação para compatibilidade com acentos e caracteres especiais no Excel (BOM UTF-8)
+    const blob = new Blob([new Uint8Array([0xEF, 0xBB, 0xBF]), csvConteudo], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    
+    const linkLink = document.createElement("a");
+    linkLink.setAttribute("href", url);
+    linkLink.setAttribute("download", `resumo_vasilhame_${new Date().toISOString().slice(0,10)}.csv`);
+    document.body.appendChild(linkLink);
+    
+    linkLink.click();
+    document.body.removeChild(linkLink);
 }
 </script>
 
